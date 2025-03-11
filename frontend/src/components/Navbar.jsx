@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useResolvedPath } from 'react-router-dom'
-import { ShoppingCartIcon } from 'lucide-react'
+import { ShoppingBagIcon, ShoppingCartIcon } from 'lucide-react'
 
 import ThemeSelector from './ThemeSelector.jsx';
 
@@ -27,18 +27,19 @@ function Navbar() {
               </div>
             </Link>
           </div>
+
         {/* RIGHT SECTION */}
         <div className="flex items-center gap-4">
             <ThemeSelector />
 
             {isHomePage && (
               <div className="indicator">
-                {/* <div className="p-2 rounded-full hover:bg-base-200 transition-colors">
+                <div className="p-2 rounded-full hover:bg-base-200 transition-colors">
                   <ShoppingBagIcon className="size-5" />
                   <span className="badge badge-sm badge-primary indicator-item">
-                    {products.length}
+                    8
                   </span>
-                </div> */}
+                </div>
               </div>
             )}
           </div>

@@ -44,36 +44,51 @@ export const getProduct = async (req, res) => {
 
     try {
         const product = await sql`
-        SELECT * FROM productsWHERE id = ${id}
+        SELECT * FROM products WHERE id = ${id}
         `;
 
-        res.status(200).json({success: true, data: product[0]});
+        return res.status(200).json({success: true, data: product[0]});
     } catch (error) {
         console.log("error in getProduct function", error);
     }
 };
 export const updateProduct = async (req, res) => {
-    const {id} = req.params;
-    const {name, price, image} = req.body;
+    const { id } = req.params;
+    const { name, price, image } = req.body;
 
     try {
+        // Validate input
+        if (!name || !price || !image) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "All fields are required" 
+            });
+        }
+
         const updatedProduct = await sql`
-        UPDATE products
-        SET name = ${name}, price = ${price}, image = ${image}
-        WHERE id = ${id}
-        RETURNING *
+            UPDATE products 
+            SET name = ${name}, price = ${price}, image = ${image} 
+            WHERE id = ${id} 
+            RETURNING *
         `;
 
         if (updatedProduct.length === 0) {
-            return res.status(404).json({success: false, message: "Product not found"});
+            return res.status(404).json({ 
+                success: false, 
+                message: "Product not found" 
+            });
         }
 
-        res.status(200).json({success: true, data: updatedProduct[0]});
-        console.log("updated product", updatedProduct);
-        res.status(200).json({success: true, data: updatedProduct[0]});
+        return res.status(200).json({ 
+            success: true, 
+            data: updatedProduct[0] 
+        });
     } catch (error) {
-        console.log("error in updateProduct function", error);
-        res.status(500).json({success: false, message: "Error updating product"});
+        console.log("Error in updateProduct function", error);
+        return res.status(500).json({ 
+            success: false, 
+            message: "Failed to update product" 
+        });
     }
 };
 export const deleteProduct = async (req, res) => {
@@ -91,9 +106,9 @@ export const deleteProduct = async (req, res) => {
         }
 
         console.log("deleted product", deletedProduct);
-        res.status(200).json({success: true, data: deletedProduct[0]});
+        return res.status(200).json({success: true, data: deletedProduct[0]});
     } catch (error) {
         console.log("error in deleteProduct function", error);
-        res.status(500).json({success: false, message: "Error deleting product"});
+        return res.status(500).json({success: false, message: "Error deleting product"});
     }
 };
